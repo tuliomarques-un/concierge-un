@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concierge UN — Universo Narrado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06080f;--bg2:#0c1019;--card:#111724;--brd:#1c2438;--acc:#e8a230;--acc-g:rgba(232,162,48,.15);--acc-d:rgba(232,162,48,.08);--txt:#d4dae6;--mut:#5a6580;--brt:#f0f2f8;--err:#e05252;--ok:#3dba70;--inf:#4a9ded;--r:12px;--rs:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:'Outfit',sans-serif;min-height:100vh}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--brd);border-radius:3px}
+.app{max-width:1100px;margin:0 auto;padding:20px}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.logo{display:flex;align-items:center;gap:12px}.logo-i{font-size:32px;filter:drop-shadow(0 0 20px rgba(232,162,48,.4))}
+.logo h1{font-size:26px;font-weight:800;color:var(--brt);letter-spacing:-.03em}.logo h1 b{color:var(--acc);font-weight:800}
+.logo-s{font-size:11px;color:var(--mut);margin-top:2px;letter-spacing:.08em;text-transform:uppercase}
+.tabs{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:4px;flex-wrap:wrap;margin-bottom:20px}
+.tab{padding:8px 16px;border-radius:8px;border:none;background:0;color:var(--mut);font-size:13px;font-weight:600;cursor:pointer;transition:.2s;white-space:nowrap;font-family:inherit}
+.tab:hover{color:var(--txt);background:var(--card)}.tab.on{background:var(--acc-d);color:var(--acc);border:1px solid rgba(232,162,48,.2)}
+.cd{background:var(--card);border:1px solid var(--brd);border-radius:var(--r);padding:24px;margin-bottom:16px}
+.ct{font-size:15px;font-weight:700;color:var(--brt);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ff{grid-column:1/-1}
+label{font-size:10px;color:var(--mut);font-weight:600;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px}
+input,select{background:var(--bg);border:1px solid var(--brd);border-radius:var(--rs);padding:10px 14px;color:var(--txt);font-size:14px;width:100%;outline:0;transition:.2s;font-family:inherit}
+input:focus,select:focus{border-color:var(--acc)}input::placeholder{color:var(--mut);opacity:.6}
+.btn{padding:10px 20px;border-radius:var(--rs);font-weight:700;font-size:14px;cursor:pointer;border:none;transition:.15s;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+.bp{background:linear-gradient(135deg,var(--acc),#c4841a);color:#000}.bp:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(232,162,48,.3)}
+.bp:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.bg{background:0;color:var(--acc);border:1px solid rgba(232,162,48,.25)}.bg:hover{background:var(--acc-d)}
+.bs{padding:6px 14px;font-size:12px}.bw{background:0;color:#25D366;border:1px solid rgba(37,211,102,.3);text-decoration:none}
+.bd{background:0;color:var(--err);border:1px solid rgba(224,82,82,.25)}
+.gc{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:16px;margin-bottom:10px;transition:.2s}
+.gc:hover{border-color:#2a3452}
+.gh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.gn{background:var(--acc-d);color:var(--acc);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.rb{background:0;border:none;color:var(--err);cursor:pointer;font-size:18px;opacity:.6;transition:.2s}.rb:hover{opacity:1}
+.rc{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:14px;margin-bottom:8px;cursor:pointer;transition:.2s}
+.rc:hover{border-color:#2a3452}.rc.sl{background:var(--acc-d);border-color:var(--acc)}
+.rp{color:var(--acc);font-weight:800;font-size:20px;font-family:'JetBrains Mono',monospace}
+.al{width:28px;height:28px;border-radius:4px}
+.db{background:rgba(61,186,112,.15);color:var(--ok);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase}
+.sb{background:rgba(74,157,237,.15);color:var(--inf);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
+.sp{display:inline-block;width:16px;height:16px;border:2px solid rgba(232,162,48,.3);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lb{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--acc-d);border:1px solid rgba(232,162,48,.2);border-radius:var(--rs);font-size:13px;color:var(--acc);margin-bottom:12px}
+.tb{background:var(--acc-d);border:1px solid rgba(232,162,48,.2);border-radius:10px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ta{font-size:22px;font-weight:800;color:var(--acc);font-family:'JetBrains Mono',monospace}
+.me{color:var(--err);background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.2);padding:10px 14px;border-radius:var(--rs);font-size:13px;margin-bottom:12px}
+.ms{color:var(--ok);background:rgba(61,186,112,.1);border:1px solid rgba(61,186,112,.2);padding:10px 14px;border-radius:var(--rs);font-size:13px;margin-bottom:12px}
+.mi{color:var(--inf);background:rgba(74,157,237,.1);border:1px solid rgba(74,157,237,.2);padding:10px 14px;border-radius:var(--rs);font-size:13px;margin-bottom:12px}
+.sa{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.sc{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r);padding:16px}
+.sl_{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.sv{font-size:16px;font-weight:700;color:var(--brt)}
+.badge{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit}
+.b-pen{background:#1e293b;color:#94a3b8}.b-src{background:#422006;color:#fbbf24}.b-quo{background:#0c4a6e;color:#38bdf8}
+.b-apr{background:#052e16;color:#4ade80}.b-bok{background:#2e1065;color:#a78bfa}
+@media(max-width:640px){.fg{grid-template-columns:1fr}.hdr{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+// ═══════════════ STATE ═══════════════
+const SK = "concierge_un_v2";
+let state;
+try { state = JSON.parse(localStorage.getItem(SK)) || {}; } catch { state = {}; }
+if (!state.evt) state.evt = { name:"", city:"", ds:"", de:"" };
+if (!state.guests) state.guests = [];
+if (!state.fr) state.fr = {};
+if (!state.sf) state.sf = {};
+if (!state.hr) state.hr = [];
+if (!state.sh) state.sh = null;
+if (!state.tr) state.tr = {};
+if (!state.st) state.st = {};
+state.tab = state.tab || "flights";
+state.searching = null;
+state.statusMsg = "";
+state.globalErr = "";
+
+const save = () => { try { const s = {...state}; delete s.searching; delete s.statusMsg; delete s.globalErr; localStorage.setItem(SK, JSON.stringify(s)); } catch {} };
+
+// ═══════════════ DATA ═══════════════
+const AP = {"Belo Horizonte":"CNF","São Paulo":"GRU","Rio de Janeiro":"GIG","Brasília":"BSB","Salvador":"SSA","Recife":"REC","Fortaleza":"FOR","Curitiba":"CWB","Porto Alegre":"POA","Manaus":"MAO","Belém":"BEL","Goiânia":"GYN","Campinas":"VCP","Vitória":"VIX","Florianópolis":"FLN","Natal":"NAT","João Pessoa":"JPA","Maceió":"MCZ","Aracaju":"AJU","São Luís":"SLZ","Teresina":"THE","Campo Grande":"CGR","Cuiabá":"CGB","Londrina":"LDB","Uberlândia":"UDI","Congonhas":"CGH","Santos Dumont":"SDU"};
+const STS = {pendente:{l:"Pendente",c:"b-pen"},pesquisando:{l:"Pesquisando",c:"b-src"},cotado:{l:"Cotado",c:"b-quo"},aprovado:{l:"Aprovado",c:"b-apr"},comprado:{l:"Comprado",c:"b-bok"}};
+const dur = m => !m?"—":`${Math.floor(m/60)}h${String(m%60).padStart(2,"0")}`;
+const ft = s => { if(!s)return""; const m=s.match(/(\d{2}:\d{2})/); return m?m[1]:s.slice(11,16); };
+const alogo = n => { const c={"LATAM":"LA","Gol":"G3","Azul":"AD","Avianca":"AV","TAP":"TP","American Airlines":"AA","United":"UA","Delta":"DL","Copa Airlines":"CM"}; return `https://www.gstatic.com/flights/airline_logos/70px/${c[n]||n?.slice(0,2)?.toUpperCase()||"XX"}.png`; };
+
+// ═══════════════ API ═══════════════
+const api = async (params) => {
+  const r = await fetch(`/api/search?${new URLSearchParams(params)}`);
+  const d = await r.json();
+  if (d.error) throw new Error(d.error);
+  return d;
+};
+
+// ═══════════════ RENDER ═══════════════
+const $ = id => document.getElementById(id);
+const h = (tag, attrs, ...kids) => {
+  const el = document.createElement(tag);
+  if (attrs) Object.entries(attrs).forEach(([k,v]) => {
+    if (k === "class") el.className = v;
+    else if (k.startsWith("on")) el.addEventListener(k.slice(2).toLowerCase(), v);
+    else if (k === "html") el.innerHTML = v;
+    else if (k === "style" && typeof v === "object") Object.assign(el.style, v);
+    else el.setAttribute(k, v);
+  });
+  kids.flat().forEach(c => { if (c != null) el.append(typeof c === "string" ? document.createTextNode(c) : c); });
+  return el;
+};
+
+function render() {
+  const app = $("app");
+  app.innerHTML = "";
+
+  // ── Header ──
+  const hdr = h("div", {class:"hdr"},
+    h("div", {class:"logo"},
+      h("span", {class:"logo-i"}, "✈️"),
+      h("div", {},
+        h("h1", {html:"Concierge <b>UN</b>"}),
+        h("div", {class:"logo-s"}, "Secretário de viagens · Universo Narrado")
+      )
+    ),
+    h("div", {style:{display:"flex",gap:"8px",alignItems:"center"}},
+      (() => {
+        const gt = state.guests.reduce((a,g) => a + (state.sf[g.id]?.price||0), 0) + (state.sh?.total_rate?.extracted_lowest||0);
+        if (gt <= 0) return h("span");
+        return h("div", {class:"tb", style:{padding:"8px 14px"}},
+          h("span", {style:{fontSize:"11px",color:"var(--mut)"}}, "Total: "),
+          h("span", {class:"ta", style:{fontSize:"16px"}}, `R$ ${gt.toLocaleString("pt-BR")}`)
+        );
+      })(),
+      h("button", {class:"btn bg bs", onClick:() => { if(confirm("Apagar tudo?")) { localStorage.removeItem(SK); location.reload(); }}}, "🗑️")
+    )
+  );
+  app.append(hdr);
+
+  // ── Event card ──
+  const evtCard = h("div", {class:"cd"},
+    h("div", {class:"ct"}, "📅 Evento"),
+    h("div", {class:"fg"},
+      h("div", {class:"ff"},
+        h("label", {}, "Nome do evento"),
+        mkInput(state.evt.name, v => { state.evt.name=v; save(); }, "Ex: Encontro UN 2026")
+      ),
+      h("div", {},
+        h("label", {}, "Cidade destino"),
+        (() => {
+          const inp = mkInput(state.evt.city, v => { state.evt.city=v; save(); render(); }, "Ex: Belo Horizonte");
+          inp.setAttribute("list","cities");
+          return inp;
+        })(),
+        (() => { const dl = document.createElement("datalist"); dl.id = "cities"; Object.keys(AP).forEach(c => { const o = document.createElement("option"); o.value = c; dl.append(o); }); return dl; })(),
+        AP[state.evt.city] ? h("span", {style:{fontSize:"11px",color:"var(--acc)",marginTop:"4px",display:"block"}}, `IATA: ${AP[state.evt.city]}`) : h("span")
+      ),
+      h("div", {style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}},
+        h("div", {}, h("label",{},"Check-in"), mkDateInput(state.evt.ds, v => { state.evt.ds=v; save(); })),
+        h("div", {}, h("label",{},"Check-out"), mkDateInput(state.evt.de, v => { state.evt.de=v; save(); }))
+      )
+    )
+  );
+  app.append(evtCard);
+
+  // ── Tabs ──
+  const tabs = h("div", {class:"tabs"},
+    ...["flights|✈️ Passagens","hotels|🏨 Hospedagem","transfers|🚗 Transfers","comms|💬 Comunicação","summary|📊 Resumo"].map(t => {
+      const [id,label] = t.split("|");
+      return h("button", {class:`tab ${state.tab===id?"on":""}`, onClick:() => { state.tab=id; save(); render(); }}, label);
+    })
+  );
+  app.append(tabs);
+
+  // ── Status/Error bars ──
+  if (state.statusMsg) app.append(h("div",{class:"lb"}, h("div",{class:"sp"}), state.statusMsg));
+  if (state.globalErr && !state.searching) app.append(h("div",{class:"me"}, `⚠️ ${state.globalErr}`));
+
+  // ═══ TAB: FLIGHTS ═══
+  if (state.tab === "flights") {
+    const gCard = h("div", {class:"cd"},
+      h("div", {style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"16px"}},
+        h("div", {class:"ct",style:{marginBottom:"0"}}, `👥 Convidados (${state.guests.length})`),
+        h("button", {class:"btn bg bs", onClick:() => { const id=`g${Date.now()}`; state.guests.push({id,name:"",origin:"",originCode:"",departDate:"",returnDate:"",phone:""}); state.st[id]="pendente"; save(); render(); }}, "+ Adicionar")
+      )
+    );
+    if (state.guests.length === 0) gCard.append(h("div",{style:{textAlign:"center",padding:"30px 0",color:"var(--mut)",fontSize:"13px"}},"Nenhum convidado. Clique \"+\u00a0Adicionar\"."));
+
+    state.guests.forEach((g, i) => {
+      const gc = h("div", {class:"gc"},
+        h("div", {class:"gh"},
+          h("div", {style:{display:"flex",alignItems:"center",gap:"8px"}},
+            h("span", {class:"gn"}, String(i+1)),
+            mkStatusSelect(g.id),
+            state.searching === g.id ? h("div",{class:"sp"}) : h("span")
+          ),
+          h("button", {class:"rb", onClick:() => { state.guests=state.guests.filter(x=>x.id!==g.id); delete state.fr[g.id]; delete state.sf[g.id]; delete state.tr[g.id]; delete state.st[g.id]; save(); render(); }}, "×")
+        ),
+        h("div", {class:"fg", style:{gap:"10px"}},
+          h("div", {}, h("label",{},"Nome"), mkInput(g.name, v => { g.name=v; save(); }, "Nome")),
+          h("div", {},
+            h("label", {html:`Origem ${g.originCode?`<span style="color:var(--acc)">(${g.originCode})</span>`:""}`}),
+            (() => { const inp = mkInput(g.origin, v => { g.origin=v; g.originCode=AP[v]||""; save(); render(); }, "Ex: São Paulo"); inp.setAttribute("list","cities"); return inp; })()
+          ),
+          h("div", {}, h("label",{},"Data ida"), mkDateInput(g.departDate, v => { g.departDate=v; save(); })),
+          h("div", {}, h("label",{},"Data volta"), mkDateInput(g.returnDate, v => { g.returnDate=v; save(); })),
+          h("div", {class:"ff"}, h("label",{},"WhatsApp"), mkInput(g.phone||"", v => { g.phone=v; save(); }, "+55 31 99999-9999"))
+        )
+      );
+      // Result preview
+      const fr = state.fr[g.id];
+      if (fr?.error) gc.append(h("div",{class:"me",style:{marginTop:"10px"}},`⚠️ ${fr.error}`));
+      if (fr?.flights?.length > 0) {
+        const low = Math.min(...fr.flights.map(f=>f.price||9999));
+        const selP = state.sf[g.id]?.price;
+        gc.append(h("div",{class:"ms",style:{marginTop:"10px"}},
+          `✅ ${fr.flights.length} voos · Menor: R$ ${low.toLocaleString("pt-BR")}${selP?` · Selecionado: R$ ${selP.toLocaleString("pt-BR")}`:""}`));
+      }
+      gCard.append(gc);
+    });
+    app.append(gCard);
+
+    // Search buttons
+    if (state.guests.length > 0) {
+      app.append(h("div", {class:"sa"},
+        h("button", {class:"btn bp", disabled:!!state.searching, onClick:searchAllFlights},
+          state.searching ? "⏳ Pesquisando..." : "🔍 Buscar voos para todos")
+      ));
+    }
+
+    // Flight results
+    state.guests.forEach(g => {
+      const fr = state.fr[g.id];
+      if (!fr?.flights?.length) return;
+      const rCard = h("div", {class:"cd", style:{marginTop:"16px"}},
+        h("div", {class:"ct"}, `🛫 Voos — ${g.name||"Convidado"} `, h("span",{style:{fontSize:"12px",color:"var(--mut)",fontWeight:"400"}},`(${g.origin} → ${state.evt.city})`))
+      );
+      if (fr.priceInsights) {
+        const pi = fr.priceInsights;
+        const lvl = pi.price_level==="low"?"Baixo 🟢":pi.price_level==="typical"?"Normal 🟡":"Alto 🔴";
+        rCard.append(h("div",{class:"mi"},`💡 Menor: R$ ${pi.lowest_price}${pi.price_level?` · ${lvl}`:""}`));
+      }
+      fr.flights.forEach((item, idx) => {
+        const segs = item.flights||[];
+        const first = segs[0]||{};
+        const last = segs[segs.length-1]||{};
+        const stops = segs.length-1;
+        const isSel = state.sf[g.id] === item;
+        const rc = h("div", {class:`rc ${isSel?"sl":""}`, onClick:() => { state.sf[g.id]=item; save(); render(); }},
+          h("div", {style:{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"12px"}},
+            h("div", {style:{display:"flex",alignItems:"center",gap:"10px"}},
+              h("img", {class:"al", src:alogo(first.airline), onerror:"this.style.display='none'"}),
+              h("div", {},
+                h("div", {style:{fontWeight:"700",color:"var(--brt)",fontSize:"14px"}},
+                  `${first.airline||""} · ${first.flight_number||""} `,
+                  stops===0 ? h("span",{class:"db"},"Direto") : h("span",{class:"sb"},`${stops} escala${stops>1?"s":""}`)
+                ),
+                h("div", {style:{color:"var(--mut)",fontSize:"13px"},html:`<b style="color:var(--brt)">${ft(first.departure_airport?.time)}</b> → <b style="color:var(--brt)">${ft(last.arrival_airport?.time)}</b> <span style="margin-left:8px">${dur(item.total_duration)}</span>`}),
+                h("div", {style:{fontSize:"11px",color:"var(--mut)",marginTop:"2px"}}, `${first.departure_airport?.id||""} → ${last.arrival_airport?.id||""}${first.airplane?` · ${first.airplane}`:""}`)
+              )
+            ),
+            h("div", {style:{textAlign:"right",flexShrink:"0"}},
+              h("div", {class:"rp"}, `R$ ${item.price?.toLocaleString("pt-BR")||"—"}`),
+              h("div", {style:{fontSize:"10px",color:"var(--mut)"}}, "por pessoa")
+            )
+          )
+        );
+        rCard.append(rc);
+      });
+      app.append(rCard);
+    });
+  }
+
+  // ═══ TAB: HOTELS ═══
+  if (state.tab === "hotels") {
+    const hCard = h("div", {class:"cd"},
+      h("div", {class:"ct"}, `🏨 Hospedagem em ${state.evt.city||"..."}`),
+      h("p", {style:{color:"var(--mut)",fontSize:"13px",marginBottom:"16px"}}, `Busca de hotéis para ${state.evt.ds||"..."} até ${state.evt.de||"..."}`),
+      h("button", {class:"btn bp", disabled:state.searching==="hotels", onClick:searchHotels},
+        state.searching==="hotels" ? "⏳ Buscando..." : "🔍 Buscar hotéis")
+    );
+    app.append(hCard);
+
+    if (state.hr.length > 0) {
+      const rCard = h("div", {class:"cd"}, h("div",{class:"ct"},`Resultados (${state.hr.length} hotéis)`));
+      state.hr.forEach((htl,i) => {
+        const isSel = state.sh === htl;
+        const rc = h("div", {class:`rc ${isSel?"sl":""}`, onClick:() => { state.sh=htl; save(); render(); }},
+          h("div", {style:{display:"flex",gap:"14px",alignItems:"flex-start"}},
+            htl.images?.[0]?.thumbnail ? h("img",{src:htl.images[0].thumbnail,style:{width:"80px",height:"60px",borderRadius:"8px",objectFit:"cover"}}) : h("span"),
+            h("div", {style:{flex:"1"}},
+              h("div", {style:{fontWeight:"700",color:"var(--brt)",fontSize:"15px",marginBottom:"4px"}}, htl.name||"Hotel"),
+              h("div", {style:{fontSize:"12px",color:"var(--mut)",marginBottom:"4px"}},
+                `${htl.hotel_class?"⭐".repeat(htl.hotel_class)+" ":""}${htl.overall_rating?`Nota: ${htl.overall_rating}/5`:""}`),
+            ),
+            h("div", {style:{textAlign:"right",flexShrink:"0"}},
+              h("div", {class:"rp",style:{fontSize:"18px"}}, htl.rate_per_night?.lowest||"—"),
+              h("div", {style:{fontSize:"10px",color:"var(--mut)"}}, "por noite"),
+              htl.total_rate?.lowest ? h("div",{style:{fontSize:"12px",color:"var(--acc)",marginTop:"4px"}},`Total: ${htl.total_rate.lowest}`) : h("span")
+            )
+          )
+        );
+        rCard.append(rc);
+      });
+      app.append(rCard);
+    }
+  }
+
+  // ═══ TAB: TRANSFERS ═══
+  if (state.tab === "transfers") {
+    const tCard = h("div", {class:"cd"},
+      h("div", {class:"ct"}, "🚗 Transfers"),
+      h("p", {style:{color:"var(--mut)",fontSize:"13px",marginBottom:"16px"}},
+        `Organize o transporte aeroporto ↔ hotel.${state.sh?` Hotel: ${state.sh.name}`:""}`));
+    if (state.guests.length === 0) tCard.append(h("div",{style:{color:"var(--mut)",fontSize:"13px"}},"Adicione convidados primeiro."));
+    state.guests.forEach((g,i) => {
+      const tr = state.tr[g.id]||{};
+      const gc = h("div", {class:"gc"},
+        h("div", {style:{display:"flex",alignItems:"center",gap:"8px",marginBottom:"12px"}},
+          h("span",{class:"gn"},String(i+1)),
+          h("strong",{style:{color:"var(--brt)"}},g.name||"Convidado"),
+          h("span",{style:{fontSize:"12px",color:"var(--mut)"}},`${g.origin} → ${state.evt.city}`)
+        ),
+        h("div",{class:"fg"},
+          h("div",{},
+            h("label",{},"Tipo de transfer"),
+            mkSelect(tr.type||"", v => { if(!state.tr[g.id])state.tr[g.id]={}; state.tr[g.id].type=v; save(); },
+              [["","Selecione..."],["uber","Uber/99"],["taxi","Táxi"],["van","Van compartilhada"],["carro","Carro alugado"],["onibus","Ônibus executivo"],["proprio","Conta própria"]])
+          ),
+          h("div",{},h("label",{},"Custo (R$)"), mkInput(tr.cost||"", v => { if(!state.tr[g.id])state.tr[g.id]={}; state.tr[g.id].cost=v; save(); }, "0", "number")),
+          h("div",{class:"ff"},h("label",{},"Observações"), mkInput(tr.details||"", v => { if(!state.tr[g.id])state.tr[g.id]={}; state.tr[g.id].details=v; save(); }, "Ex: Chega 14h no CNF"))
+        )
+      );
+      tCard.append(gc);
+    });
+    app.append(tCard);
+  }
+
+  // ═══ TAB: COMMS ═══
+  if (state.tab === "comms") {
+    const cCard = h("div", {class:"cd"},
+      h("div",{class:"ct"},"💬 Comunicação via WhatsApp"),
+      h("p",{style:{color:"var(--mut)",fontSize:"13px",marginBottom:"16px"}},"Envie voo + hotel + transfer para cada convidado com 1 clique.")
+    );
+    state.guests.forEach((g,i) => {
+      const hasFl = !!state.sf[g.id];
+      const hasHt = !!state.sh;
+      const hasTr = !!state.tr[g.id]?.type;
+      const gc = h("div",{class:"gc"},
+        h("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between"}},
+          h("div",{style:{display:"flex",alignItems:"center",gap:"10px"}},
+            h("span",{class:"gn"},String(i+1)),
+            h("div",{},
+              h("strong",{style:{color:"var(--brt)"}},g.name||"Convidado"),
+              h("div",{style:{fontSize:"11px",color:"var(--mut)",marginTop:"2px"}},g.phone||"Sem telefone")
+            )
+          ),
+          h("div",{style:{display:"flex",alignItems:"center",gap:"12px"}},
+            h("div",{style:{display:"flex",gap:"6px"}},
+              h("span",{style:{fontSize:"11px",opacity:hasFl?1:.3},title:"Voo"},"✈️"),
+              h("span",{style:{fontSize:"11px",opacity:hasHt?1:.3},title:"Hotel"},"🏨"),
+              h("span",{style:{fontSize:"11px",opacity:hasTr?1:.3},title:"Transfer"},"🚗")
+            ),
+            h("a",{class:"btn bw bs",href:buildWA(g),target:"_blank",rel:"noreferrer"},"💬 Enviar WhatsApp")
+          )
+        )
+      );
+      cCard.append(gc);
+    });
+    app.append(cCard);
+  }
+
+  // ═══ TAB: SUMMARY ═══
+  if (state.tab === "summary") {
+    const flTot = state.guests.reduce((a,g) => a+(state.sf[g.id]?.price||0), 0);
+    const htTot = state.sh?.total_rate?.extracted_lowest||0;
+    const trTot = state.guests.reduce((a,g) => a+Number(state.tr[g.id]?.cost||0), 0);
+    const grand = flTot + htTot + trTot;
+
+    const sCard = h("div",{class:"cd"},
+      h("div",{class:"ct"},"📊 Resumo do Evento"),
+      h("div",{style:{fontSize:"20px",fontWeight:"800",color:"var(--brt)",marginBottom:"4px"}},state.evt.name||"Sem nome"),
+      h("div",{style:{fontSize:"13px",color:"var(--mut)",marginBottom:"20px"}},`${state.evt.city||"?"} · ${state.evt.ds||"?"} até ${state.evt.de||"?"}`),
+      h("div",{class:"sg"},
+        mkSummaryCard("Convidados",String(state.guests.length)),
+        mkSummaryCard("Passagens",`R$ ${flTot.toLocaleString("pt-BR")}`,`${Object.keys(state.sf).length} selecionadas`),
+        mkSummaryCard("Hospedagem",state.sh?state.sh.total_rate?.lowest||"—":"Não selecionado",state.sh?.name||""),
+        mkSummaryCard("Transfers",`R$ ${trTot.toLocaleString("pt-BR")}`,`${Object.keys(state.tr).filter(k=>state.tr[k]?.type).length} organizados`)
+      ),
+      grand > 0 ? h("div",{class:"tb",style:{marginTop:"20px"}},
+        h("span",{style:{color:"var(--mut)",fontSize:"13px"}},"Total estimado"),
+        h("span",{class:"ta"},`R$ ${grand.toLocaleString("pt-BR")}`)
+      ) : h("span")
+    );
+    app.append(sCard);
+
+    // Per guest
+    const pCard = h("div",{class:"cd"},h("div",{class:"ct"},"Por convidado"));
+    state.guests.forEach((g,i) => {
+      const fl = state.sf[g.id];
+      const tr = state.tr[g.id];
+      const gTot = (fl?.price||0)+Number(tr?.cost||0);
+      const gc = h("div",{class:"gc"},
+        h("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:"8px"}},
+          h("div",{style:{display:"flex",alignItems:"center",gap:"8px"}},
+            h("span",{class:"gn"},String(i+1)),
+            h("strong",{style:{color:"var(--brt)"}},g.name||"Convidado"),
+            mkStatusSelect(g.id)
+          ),
+          h("div",{style:{fontSize:"14px",fontWeight:"700",color:"var(--acc)",fontFamily:"'JetBrains Mono',monospace"}},`R$ ${gTot.toLocaleString("pt-BR")}`)
+        ),
+        h("div",{style:{display:"flex",gap:"16px",marginTop:"8px",fontSize:"12px",color:"var(--mut)",flexWrap:"wrap"}},
+          h("span",{},`✈️ ${fl?`${fl.flights?.[0]?.airline||""} R$${fl.price}`:"Sem voo"}`),
+          h("span",{},`🏨 ${state.sh?.name||"Sem hotel"}`),
+          h("span",{},`🚗 ${tr?.type||"Sem transfer"}${tr?.cost?` R$${tr.cost}`:""}`)
+        )
+      );
+      pCard.append(gc);
+    });
+    app.append(pCard);
+  }
+}
+
+// ═══════════════ HELPERS ═══════════════
+function mkInput(val, onChange, ph, type) {
+  const inp = h("input", {type:type||"text", value:val, placeholder:ph||""});
+  inp.addEventListener("input", e => onChange(e.target.value));
+  return inp;
+}
+function mkDateInput(val, onChange) {
+  const inp = h("input", {type:"date", value:val||""});
+  inp.addEventListener("change", e => onChange(e.target.value));
+  return inp;
+}
+function mkSelect(val, onChange, opts) {
+  const sel = document.createElement("select");
+  opts.forEach(([v,l]) => { const o = document.createElement("option"); o.value=v; o.textContent=l; sel.append(o); });
+  sel.value = val;
+  sel.addEventListener("change", e => onChange(e.target.value));
+  return sel;
+}
+function mkStatusSelect(gid) {
+  const cur = state.st[gid]||"pendente";
+  const sel = document.createElement("select");
+  sel.className = `badge ${STS[cur].c}`;
+  Object.entries(STS).forEach(([k,v]) => { const o=document.createElement("option"); o.value=k; o.textContent=v.l; sel.append(o); });
+  sel.value = cur;
+  sel.addEventListener("change", e => { state.st[gid]=e.target.value; sel.className=`badge ${STS[e.target.value].c}`; save(); });
+  return sel;
+}
+function mkSummaryCard(label, value, sub) {
+  return h("div",{class:"sc"},
+    h("div",{class:"sl_"},label),
+    h("div",{class:"sv"},value),
+    sub ? h("div",{style:{fontSize:"11px",color:"var(--mut)"}},sub) : h("span")
+  );
+}
+
+// ═══════════════ ACTIONS ═══════════════
+async function searchAllFlights() {
+  state.globalErr = "";
+  for (const g of state.guests) {
+    const dst = AP[state.evt.city]||state.evt.city?.toUpperCase().slice(0,3);
+    const org = g.originCode||g.origin?.toUpperCase().slice(0,3);
+    if (!org||!dst||!g.departDate) continue;
+    state.searching = g.id; state.st[g.id] = "pesquisando";
+    state.statusMsg = `Buscando voos para ${g.name||"convidado"}...`;
+    render();
+    try {
+      const params = { engine:"google_flights", departure_id:org, arrival_id:dst, outbound_date:g.departDate, type:g.returnDate?"1":"2", hl:"pt", gl:"br", currency:"BRL" };
+      if (g.returnDate) params.return_date = g.returnDate;
+      const d = await api(params);
+      state.fr[g.id] = { flights:[...(d.best_flights||[]),...(d.other_flights||[])], priceInsights:d.price_insights, error:null };
+      state.st[g.id] = "cotado";
+    } catch (e) {
+      state.fr[g.id] = { flights:[], error:e.message };
+      state.st[g.id] = "pendente";
+    }
+    save();
+  }
+  state.searching = null; state.statusMsg = "";
+  render();
+}
+
+async function searchHotels() {
+  if (!state.evt.city||!state.evt.ds||!state.evt.de) { state.globalErr="Preencha cidade e datas do evento."; render(); return; }
+  state.searching = "hotels"; state.statusMsg = "Buscando hotéis..."; state.globalErr = "";
+  render();
+  try {
+    const d = await api({ engine:"google_hotels", q:`hotéis em ${state.evt.city}`, check_in_date:state.evt.ds, check_out_date:state.evt.de, hl:"pt", gl:"br", currency:"BRL" });
+    state.hr = d.properties || [];
+  } catch (e) { state.globalErr = e.message; }
+  state.searching = null; state.statusMsg = "";
+  save(); render();
+}
+
+function buildWA(g) {
+  const fl = state.sf[g.id]; const htl = state.sh; const tr = state.tr[g.id];
+  let m = `✈️ *Universo Narrado — ${state.evt.name}*\n\nOlá, ${g.name}! 👋\n\n`;
+  if (fl) {
+    const s=fl.flights||[]; const f=s[0]||{}; const l=s[s.length-1]||{};
+    m += `*🛫 VOO*\n${f.airline||""} ${f.flight_number||""}\n${ft(f.departure_airport?.time)} → ${ft(l.arrival_airport?.time)}\n${f.departure_airport?.id} → ${l.arrival_airport?.id}\n${s.length<=1?"Direto":`${s.length-1} escala(s)`} · ${dur(fl.total_duration)}\n💰 R$ ${fl.price}\n\n`;
+  }
+  if (htl) m += `*🏨 HOTEL*\n${htl.name}\n${htl.rate_per_night?.lowest||""}/noite\n${htl.total_rate?.lowest?`Total: ${htl.total_rate.lowest}\n`:""}\n`;
+  if (tr?.details) m += `*🚗 TRANSFER*\n${tr.details}\n\n`;
+  m += `Me confirma se está ok? 🙏`;
+  return `https://api.whatsapp.com/send?phone=${(g.phone||"").replace(/\D/g,"")}&text=${encodeURIComponent(m)}`;
+}
+
+// ═══════════════ INIT ═══════════════
+render();
+</script>
+</body>
+</html>
