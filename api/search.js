@@ -1,4 +1,6 @@
-export default async function handler(req, res) {
+const https = require("https");
+
+module.exports = (req, res) => {
   // CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
@@ -8,18 +10,29 @@ export default async function handler(req, res) {
   const API_KEY = process.env.SERPAPI_KEY;
   if (!API_KEY) {
     return res.status(500).json({
-      error: "SERPAPI_KEY não configurada. Vá em Vercel → Settings → Environment Variables e adicione SERPAPI_KEY.",
+      error: "SERPAPI_KEY não configurada. Vá em Vercel → Settings → Environment Variables.",
     });
   }
 
-  try {
-    const params = new URLSearchParams({ api_key: API_KEY, ...req.query });
-    const resp = await fetch(`https://serpapi.com/search.json?${params}`);
-    const data = await resp.json();
+  // Build query params
+  const params = new URLSearchParams(req.query);
+  params.set("api_key", API_KEY);
 
-    if (data.error) return res.status(400).json({ error: data.error });
-    return res.status(200).json(data);
-  } catch (err) {
-    return res.status(500).json({ error: err.message || "Erro interno" });
-  }
-}
+  const url = `https://serpapi.com/search.json?${params.toString()}`;
+
+  https.get(url, (response) => {
+    let data = "";
+    response.on("data", (chunk) => { data += chunk; });
+    response.on("end", () => {
+      try {
+        const json = JSON.parse(data);
+        if (json.error) return res.status(400).json({ error: json.error });
+        return res.status(200).json(json);
+      } catch (e) {
+        return res.status(500).json({ error: "Erro ao processar resposta do SerpApi" });
+      }
+    });
+  }).on("error", (err) => {
+    return res.status(500).json({ error: err.message });
+  });
+};
